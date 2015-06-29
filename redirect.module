@@ -1237,7 +1237,7 @@ function redirect_can_redirect() {
     $path = current_path();
     $can_redirect = TRUE;
 
-    if ($_SERVER['SCRIPT_NAME'] != $GLOBALS['base_path'] . 'index.php') {
+    if (!preg_match('/index\.php$/', $_SERVER['SCRIPT_NAME'])) {
       // Do not redirect if the root script is not /index.php.
       $can_redirect = FALSE;
     }
