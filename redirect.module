@@ -1041,7 +1041,11 @@ function redirect_purge_inactive_redirects(array $types = array('redirect'), $in
     $interval = variable_get('redirect_purge_inactive', 0);
   }
 
-  if (!$interval || !variable_get('redirect_page_cache', 0) || !variable_get('page_cache_invoke_hooks', TRUE)) {
+  if (!$interval) {
+    return FALSE;
+  }
+
+  if (!variable_get('redirect_page_cache', 0) || !variable_get('page_cache_invoke_hooks', TRUE)) {
     // If serving redirects from the page cache is enabled and hooks are not
     // executed during page caching, then we cannot track when a redirect is
     // used. Therefore, we cannot remove unused redirects.
