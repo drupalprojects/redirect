@@ -552,14 +552,15 @@ function redirect_load_by_hash($hash, $reset = FALSE) {
  * @param $enabled_only
  *   Boolean that indicates whether to only load enabled redirects.
  *
- * @return
+ * @return array
  *   An indexed array of IDs, or an empty array if there is no result set.
  */
 function redirect_fetch_rids_by_path($source, $language, $enabled_only = FALSE) {
   // Run a case-insensitive query for matching RIDs first.
   $rid_query = db_select('redirect');
   $rid_query->addField('redirect', 'rid');
-  if ($enabled_only) {
+  // Prevent errors if redirect_update_7101() has not yet been run.
+  if ($enabled_only && db_field_exists('redirect', 'status')) {
     $rid_query->condition('status', 1);
   }
   if ($source != variable_get('site_frontpage', 'node')) {
