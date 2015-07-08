@@ -391,7 +391,7 @@ function redirect_path_update(array $path) {
       redirect_save($redirect);
     }
     // If the existing redirect is disabled, re-enable it.
-    elseif (property_exists($existing, 'status') && $existing->status == 0)  {
+    elseif (isset($existing->status) && $existing->status == 0)  {
       $existing->status = 1;
       redirect_save($existing);
     }
@@ -966,7 +966,7 @@ function redirect_change_status_multiple(array $rids, $status) {
     $redirects = redirect_load_multiple($rids, array(), TRUE);
 
     foreach ($redirects as $rid => $redirect) {
-      if (property_exists($redirect, 'status') && $redirect->status == $status) {
+      if (isset($redirect->status) && $redirect->status == $status) {
         // We no-op if the redirect is not actually changing status.
         // So if a disabled redirect is disabled, neither redirect_save() is
         // triggered, nor do we log any message.
