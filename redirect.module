@@ -1672,3 +1672,16 @@ function redirect_redirect_operations() {
   );
   return $operations;
 }
+
+/**
+ * Implements hook_form_FORM_ID_alter() on behalf of mpac.module.
+ */
+function mpac_form_redirect_edit_form_alter(&$form, &$form_state) {
+  if ($form['redirect']['#type'] == 'textfield') {
+    $form['redirect']['#autocomplete_path'] = 'mpac/autocomplete/menu';
+    $form['redirect']['#description'] .= '<br />' . t("You may enter the title of the node you'd like to link to to get a list of all possible matches.");
+    if (module_exists('path')) {
+      $form['redirect']['#description'] .= ' ' . t('Matches marked with %marker are URL aliases.', array('%marker' => t('*')));
+    }
+  }
+}
