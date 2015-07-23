@@ -1060,6 +1060,7 @@ function redirect_purge_inactive_redirects(array $types = array('redirect'), $in
     $query->condition('type', $types);
   }
   $query->condition('access', REQUEST_TIME - $interval, '<');
+  $query->range(0, variable_get('redirect_purge_amount', 100));
   $query->addTag('redirect_purge');
   $rids = $query->execute()->fetchCol();
 
@@ -1402,6 +1403,7 @@ function redirect_variables() {
     'redirect_passthrough_querystring' => 1,
     'redirect_page_cache' => 0,
     'redirect_purge_inactive' => 0,
+    'redirect_purge_amount' => 100,
     'redirect_global_home' => 1,
     'redirect_global_clean' => 1,
     'redirect_global_canonical' => 1,
