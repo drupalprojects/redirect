@@ -12,3 +12,4 @@ files[] = views/redirect_handler_field_redirect_operations.inc
 files[] = views/redirect_handler_field_redirect_link_edit.inc
 files[] = views/redirect_handler_field_redirect_link_delete.inc
 configure = admin/config/search/redirect/settings
+suggests[] = mpac
