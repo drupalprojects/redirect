@@ -978,11 +978,11 @@ function redirect_change_status_multiple(array $rids, $status) {
 
       if ($status) {
         $redirect_link = l($redirect->redirect, $redirect->redirect) . '=> ' . l($redirect->source, $redirect->source);
-        watchdog('redirect', 'Enabled redirect: !redirect_source_link', array('!redirect_link' => $redirect_link));
+        watchdog('redirect', 'Enabled redirect: !redirect_link', array('!redirect_link' => $redirect_link));
       }
       else {
         $redirect_link = l($redirect->redirect, $redirect->redirect) . '=> ' . l($redirect->source, $redirect->source);
-        watchdog('redirect', 'Disabled redirect: !redirect_source_link', array('!redirect_link' => $redirect_link));
+        watchdog('redirect', 'Disabled redirect: !redirect_link', array('!redirect_link' => $redirect_link));
       }
     }
   }
