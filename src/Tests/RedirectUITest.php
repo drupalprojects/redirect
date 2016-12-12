@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\redirect\Tests\RedirectUITest
- */
-
 namespace Drupal\redirect\Tests;
 
 use Drupal\Component\Utility\Unicode;

@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\redirect\Form\RedirectFix404Form
- */
-
 namespace Drupal\redirect\Form;
 
 use Drupal\Component\Utility\SafeMarkup;

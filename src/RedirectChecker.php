@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains Drupal\redirect\RedirectChecker.
- */
-
 namespace Drupal\redirect;
 
 use Drupal\Core\Access\AccessManager;

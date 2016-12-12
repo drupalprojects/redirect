@@ -1,16 +1,10 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\redirect\Plugin\Field\FieldWidget\RedirectSourceWidget
- */
-
 namespace Drupal\redirect\Plugin\Field\FieldWidget;
 
 use Drupal\Component\Utility\UrlHelper;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Field\WidgetBase;
-use Drupal\link\Plugin\Field\FieldWidget\LinkWidget;
 use Drupal\Core\Url;
 use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;

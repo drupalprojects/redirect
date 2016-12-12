@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\redirect\RedirectStorageSchema.
- */
-
 namespace Drupal\redirect;
 
 use Drupal\Core\Entity\ContentEntityTypeInterface;
