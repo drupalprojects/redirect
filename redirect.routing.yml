@@ -38,6 +38,13 @@ entity.redirect.delete_form:
   requirements:
     _entity_access: 'redirect.delete'
 
+entity.redirect.multiple_delete_confirm:
+  path: '/admin/config/search/redirect/delete'
+  defaults:
+    _form: '\Drupal\redirect\Form\RedirectDeleteMultipleForm'
+  requirements:
+    _permission: 'administer redirects'
+
 redirect.settings:
   path: '/admin/config/search/redirect/settings'
   defaults:

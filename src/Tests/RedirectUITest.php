@@ -208,20 +208,30 @@ class RedirectUITest extends WebTestBase {
     // Check if the list has 2 rows.
     $this->assertTrue(count($rows) == 2);
 
-    // Finally test the delete action.
+    // Test the plural form of the bulk delete action.
     $this->drupalGet('admin/config/search/redirect');
+    $edit = [
+      'redirect_bulk_form[0]' => TRUE,
+      'redirect_bulk_form[1]' => TRUE,
+    ];
+    $this->drupalPostForm(NULL, $edit, t('Apply'));
+    $this->assertText('Are you sure you want to delete these redirects?');
+    $this->clickLink('Cancel');
+
+    // Test the delete action.
     $this->clickLink(t('Delete'));
     $this->assertRaw(t('Are you sure you want to delete the URL redirect from %source to %redirect?',
       array('%source' => Url::fromUri('base:non-existing', ['query' => ['key' => 'value']])->toString(), '%redirect' => Url::fromUri('base:node')->toString())));
     $this->drupalPostForm(NULL, array(), t('Delete'));
-
-    // Delete the other redirect.
-    $this->clickLink(t('Delete'));
-    $this->drupalPostForm(NULL, array(), t('Delete'));
-
     $this->assertUrl('admin/config/search/redirect');
-    $this->assertText(t('There is no redirect yet.'));
 
+    // Test the bulk delete action.
+    $this->drupalPostForm(NULL, ['redirect_bulk_form[0]' => TRUE], t('Apply'));
+    $this->assertText('Are you sure you want to delete this redirect?');
+    $this->assertText('test27');
+    $this->drupalPostForm(NULL, [], t('Delete'));
+
+    $this->assertText(t('There is no redirect yet.'));
   }
 
   /**
