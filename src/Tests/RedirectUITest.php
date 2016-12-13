@@ -214,7 +214,7 @@ class RedirectUITest extends WebTestBase {
       'redirect_bulk_form[0]' => TRUE,
       'redirect_bulk_form[1]' => TRUE,
     ];
-    $this->drupalPostForm(NULL, $edit, t('Apply'));
+    $this->drupalPostForm(NULL, $edit, t('Apply to selected items'));
     $this->assertText('Are you sure you want to delete these redirects?');
     $this->clickLink('Cancel');
 
@@ -226,7 +226,7 @@ class RedirectUITest extends WebTestBase {
     $this->assertUrl('admin/config/search/redirect');
 
     // Test the bulk delete action.
-    $this->drupalPostForm(NULL, ['redirect_bulk_form[0]' => TRUE], t('Apply'));
+    $this->drupalPostForm(NULL, ['redirect_bulk_form[0]' => TRUE], t('Apply to selected items'));
     $this->assertText('Are you sure you want to delete this redirect?');
     $this->assertText('test27');
     $this->drupalPostForm(NULL, [], t('Delete'));
