@@ -16,6 +16,8 @@ use Drupal\simpletest\WebTestBase;
  */
 class RedirectUITest extends WebTestBase {
 
+  use AssertRedirectTrait;
+
   /**
    * @var \Drupal\Core\Session\AccountInterface
    */
@@ -235,35 +237,6 @@ class RedirectUITest extends WebTestBase {
   }
 
   /**
-   * Tests the fix 404 pages workflow.
-   */
-  public function testFix404Pages() {
-    $this->drupalLogin($this->adminUser);
-
-    // Visit a non existing page to have the 404 watchdog entry.
-    $this->drupalGet('non-existing');
-
-    // Go to the "fix 404" page and check the listing.
-    $this->drupalGet('admin/config/search/redirect/404');
-    $this->assertText('non-existing');
-    $this->clickLink(t('Add redirect'));
-
-    // Check if we generate correct Add redirect url and if the form is
-    // pre-filled.
-    $destination = Url::fromUri('base:admin/config/search/redirect/404')->toString();
-    $this->assertUrl('admin/config/search/redirect/add', ['query' => ['source' => 'non-existing', 'destination' => $destination]]);
-    $this->assertFieldByName('redirect_source[0][path]', 'non-existing');
-
-    // Save the redirect.
-    $this->drupalPostForm(NULL, array('redirect_redirect[0][uri]' => '/node'), t('Save'));
-    $this->assertUrl('admin/config/search/redirect/404');
-
-    // Check if the redirect works as expected.
-    $this->drupalGet('non-existing');
-    $this->assertUrl('node');
-  }
-
-  /**
    * Tests redirects being automatically created upon path alias change.
    */
   public function testAutomaticRedirects() {
@@ -404,42 +377,6 @@ class RedirectUITest extends WebTestBase {
     ));
     $term->save();
     return $term;
-  }
-
-  /**
-   * Asserts the redirect from $path to the $expected_ending_url.
-   *
-   * @param string $path
-   *   The request path.
-   * @param $expected_ending_url
-   *   The path where we expect it to redirect. If NULL value provided, no
-   *   redirect is expected.
-   * @param string $expected_ending_status
-   *   The status we expect to get with the first request.
-   */
-  public function assertRedirect($path, $expected_ending_url, $expected_ending_status = 'HTTP/1.1 301 Moved Permanently') {
-    $this->drupalHead($path);
-    $headers = $this->drupalGetHeaders(TRUE);
-
-    $ending_url = isset($headers[0]['location']) ? $headers[0]['location'] : NULL;
-    $message = SafeMarkup::format('Testing redirect from %from to %to. Ending url: %url', array('%from' => $path, '%to' => $expected_ending_url, '%url' => $ending_url));
-
-    if ($expected_ending_url == '<front>') {
-      $expected_ending_url = Url::fromUri('base:')->setAbsolute()->toString();
-    }
-    elseif (!empty($expected_ending_url)) {
-      // Check for absolute/external urls.
-      if (!parse_url($expected_ending_url, PHP_URL_SCHEME)) {
-        $expected_ending_url = Url::fromUri('base:' . $expected_ending_url)->setAbsolute()->toString();
-      }
-    }
-    else {
-      $expected_ending_url = NULL;
-    }
-
-    $this->assertEqual($expected_ending_url, $ending_url, $message);
-
-    $this->assertEqual($headers[0][':status'], $expected_ending_status);
   }
 
   /**

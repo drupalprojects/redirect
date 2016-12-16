@@ -170,6 +170,20 @@ class Redirect extends ContentEntityBase {
   }
 
   /**
+   * Gets the source URL path with its query.
+   *
+   * @return string
+   *   The source URL path, eventually with its query.
+   */
+  public function getSourcePathWithQuery() {
+    $path = '/' . $this->get('redirect_source')->path;
+    if ($this->get('redirect_source')->query) {
+      $path .= '?' . UrlHelper::buildQuery($this->get('redirect_source')->query);
+    }
+    return $path;
+  }
+
+  /**
    * Gets the redirect URL data.
    *
    * @return array
