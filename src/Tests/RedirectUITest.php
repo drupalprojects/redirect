@@ -47,6 +47,7 @@ class RedirectUITest extends WebTestBase {
     $this->drupalCreateContentType(array('type' => 'article', 'name' => 'Article'));
     $this->adminUser = $this->drupalCreateUser(array(
       'administer redirects',
+      'administer redirect settings',
       'access site reports',
       'access content',
       'bypass node access',
