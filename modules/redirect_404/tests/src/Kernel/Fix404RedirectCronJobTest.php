@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\redirect_404\Kernel;
 
+use Drupal\Core\Database\Database;
 use Drupal\KernelTests\KernelTestBase;
 
 /**
@@ -24,6 +25,14 @@ class Fix404RedirectCronJobTest extends KernelTestBase {
   protected function setUp() {
     parent::setUp();
     $this->installSchema('redirect_404', 'redirect_404');
+
+    // Insert some records in the test table with a given count and timestamp.
+    $this->insert404Row('/test1', 12, strtotime('now'));
+    $this->insert404Row('/test2', 5, strtotime('-1 hour'));
+    $this->insert404Row('/test3', 315, strtotime('-1 week'));
+    $this->insert404Row('/test4', 300, strtotime('-1 month'));
+    $this->insert404Row('/test5', 1557, strtotime('-1 week'));
+    $this->insert404Row('/test6', 1, strtotime('-1 day'));
   }
 
   /**
@@ -36,20 +45,15 @@ class Fix404RedirectCronJobTest extends KernelTestBase {
       ->set('row_limit', 3)
       ->save();
 
-    // Insert some records in the test table with fake count and timestamp.
-    $this->insert404Row('/test1', 12, strtotime('now'));
-    $this->insert404Row('/test2', 5, strtotime('now'));
-    $this->insert404Row('/test3', 315, strtotime('-1 week'));
-    $this->insert404Row('/test4', 300, strtotime('-1 month'));
-    $this->insert404Row('/test5', 1557, strtotime('-1 week'));
-    $this->insert404Row('/test6', 1, strtotime('-1 day'));
-
     // Check that there are 6 rows in the redirect_404 table.
     $result = db_query("SELECT COUNT(*) as rows FROM {redirect_404}")->fetchField();
     $this->assertEquals(6, $result);
 
     // Run cron to drop 3 rows from the redirect_404 test table.
     redirect_404_cron();
+
+    $result = db_query("SELECT COUNT(*) as rows FROM {redirect_404}")->fetchField();
+    $this->assertEquals(3, $result);
 
     // Check there are only 3 rows with more count in the redirect_404 table.
     if (\Drupal::database()->driver() == 'mysql' || \Drupal::database()->driver() == 'pgsql') {
@@ -81,20 +85,15 @@ class Fix404RedirectCronJobTest extends KernelTestBase {
       ->set('row_limit', 5)
       ->save();
 
-    // Insert some records in the test table with fake count and timestamp.
-    $this->insert404Row('/test1', 12, strtotime('now'));
-    $this->insert404Row('/test2', 5, strtotime('now'));
-    $this->insert404Row('/test3', 315, strtotime('-1 week'));
-    $this->insert404Row('/test4', 300, strtotime('-1 month'));
-    $this->insert404Row('/test5', 1557, strtotime('-1 week'));
-    $this->insert404Row('/test6', 1, strtotime('-1 day'));
-
     // Check that there are 6 rows in the redirect_404 table.
     $result = db_query("SELECT COUNT(*) as rows FROM {redirect_404}")->fetchField();
     $this->assertEquals(6, $result);
 
     // Run cron to drop just 1 row from the redirect_404 test table.
     redirect_404_cron();
+
+    $result = db_query("SELECT COUNT(*) as rows FROM {redirect_404}")->fetchField();
+    $this->assertEquals(5, $result);
 
     // Check only the row with least count has been removed from the table.
     if (\Drupal::database()->driver() == 'mysql' || \Drupal::database()->driver() == 'pgsql') {
@@ -106,13 +105,13 @@ class Fix404RedirectCronJobTest extends KernelTestBase {
       $this->assertNo404Row('/test6');
     }
     else {
-      // In SQLite is the opposite: the rows kept are the ones inserted today.
+      // In SQlite, only the oldest row is deleted.
       $this->assert404Row('/test1');
       $this->assert404Row('/test2');
-      $this->assertNo404Row('/test3');
+      $this->assert404Row('/test3');
       $this->assertNo404Row('/test4');
-      $this->assertNo404Row('/test5');
-      $this->assertNo404Row('/test6');
+      $this->assert404Row('/test5');
+      $this->assert404Row('/test6');
     }
   }
 
