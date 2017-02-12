@@ -24,7 +24,7 @@ class Fix404RedirectUILanguageTest extends Redirect404TestBase {
    *
    * @var array
    */
-  public static $modules = ['content_translation'];
+  public static $modules = ['language'];
 
   /**
    * Admin user's permissions for this test.
