@@ -32,12 +32,12 @@ class Redirect404LogSuppressor implements LoggerChannelFactoryInterface {
   /**
    * Constructs a Redirect404LogSuppressor object.
    *
-   * @param \Drupal\Core\Logger\LoggerChannelFactory $logger_channel_factory
+   * @param \Drupal\Core\Logger\LoggerChannelFactoryInterface $logger_channel_factory
    *   The logger channel factory.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The configuration factory.
    */
-  public function __construct(LoggerChannelFactory $logger_channel_factory, ConfigFactoryInterface $config_factory) {
+  public function __construct(LoggerChannelFactoryInterface $logger_channel_factory, ConfigFactoryInterface $config_factory) {
     $this->loggerChannelFactory = $logger_channel_factory;
     $this->configFactory = $config_factory;
   }
