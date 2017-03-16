@@ -90,7 +90,7 @@ class RouteNormalizerRequestSubscriber implements EventSubscriberInterface {
     }
 
     $request = $event->getRequest();
-    if ($request->attributes->get('_disable_route_normalizer') || $request->get('_route') == 'image.style_public') {
+    if ($request->attributes->get('_disable_route_normalizer')) {
       return;
     }
 
