@@ -204,14 +204,15 @@ function redirect_repository() {
  */
 function redirect_delete_by_path($path, $langcode = NULL, $match_subpaths_and_redirect = TRUE) {
   $path = ltrim($path, '/');
-  $query = \Drupal::database()->select('redirect');
+  $database = \Drupal::database();
+  $query = $database->select('redirect');
   $query->addField('redirect', 'rid');
   $query_or = db_or();
-  $query_or->condition('redirect_source__path', db_like($path), 'LIKE');
+  $query_or->condition('redirect_source__path', $database->escapeLike($path), 'LIKE');
   if ($match_subpaths_and_redirect) {
-    $query_or->condition('redirect_source__path', db_like($path . '/') . '%', 'LIKE');
-    $query_or->condition('redirect_redirect__uri', db_like($path), 'LIKE');
-    $query_or->condition('redirect_redirect__uri', db_like($path . '/') . '%', 'LIKE');
+    $query_or->condition('redirect_source__path', $database->escapeLike($path . '/') . '%', 'LIKE');
+    $query_or->condition('redirect_redirect__uri', $database->escapeLike($path), 'LIKE');
+    $query_or->condition('redirect_redirect__uri', $database->escapeLike($path . '/') . '%', 'LIKE');
   }
 
   if ($langcode) {
