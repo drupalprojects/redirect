@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\Tests\redirect\Unit\EventSubscriber;
+namespace Drupal\Tests\redirect\Unit;
 
 use Drupal\Tests\UnitTestCase;
 use Drupal\redirect\EventSubscriber\RouteNormalizerRequestSubscriber;
@@ -11,9 +11,9 @@ use Drupal\Core\DependencyInjection\ContainerBuilder;
 
 /**
  * Tests the route normalizer.
- * 
+ *
  * @group redirect
- * 
+ *
  * @coversDefaultClass \Drupal\redirect\EventSubscriber\RouteNormalizerRequestSubscriber
  */
 class RouteNormalizerRequestSubscriberTest extends UnitTestCase {
@@ -210,7 +210,7 @@ class RouteNormalizerRequestSubscriberTest extends UnitTestCase {
    *
    * @return \Symfony\Component\HttpKernel\Event\GetResponseEvent
    */
-  protected function getGetResponseEventStub($path_info, array $query_string, $request_type = HttpKernelInterface::MASTER_REQUEST, $set_request_attribute = FALSE) {
+  protected function getGetResponseEventStub($path_info, $query_string, $request_type = HttpKernelInterface::MASTER_REQUEST, $set_request_attribute = FALSE) {
     $request = Request::create($path_info . '?' . $query_string, 'GET', [], [], [], ['SCRIPT_NAME' => 'index.php', 'SCRIPT_FILENAME' => 'index.php']);
 
     if ($set_request_attribute === TRUE) {
