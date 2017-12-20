@@ -249,6 +249,8 @@ class RedirectUITest extends WebTestBase {
       'langcode' => Language::LANGCODE_NOT_SPECIFIED,
       'path' => array('alias' => '/node_test_alias'),
     ));
+    $this->drupalGet('node/' . $node->id() . '/edit');
+    $this->assertText(t('No URL redirects available.'));
     $this->drupalPostForm('node/' . $node->id() . '/edit', array('path[0][alias]' => '/node_test_alias_updated'), t('Save'));
 
     $redirect = $this->repository->findMatchingRedirect('node_test_alias', array(), Language::LANGCODE_NOT_SPECIFIED);
@@ -264,6 +266,11 @@ class RedirectUITest extends WebTestBase {
 
     \Drupal::service('path.alias_manager')->cacheClear();
     $redirect = $this->repository->findMatchingRedirect('node_test_alias_updated', array(), Language::LANGCODE_NOT_SPECIFIED);
+
+    $this->drupalGet('node/' . $node->id() . '/edit');
+    $this->assertText($redirect->getSourcePathWithQuery());
+    $this->assertLinkByHref(Url::fromRoute('entity.redirect.edit_form', ['redirect' => $redirect->id()])->toString());
+    $this->assertLinkByHref(Url::fromRoute('entity.redirect.delete_form', ['redirect' => $redirect->id()])->toString());
 
     $this->assertEqual($redirect->getRedirectUrl()->toString(), Url::fromUri('base:node_test_alias')->toString());
     // Test if the automatically created redirect works.
