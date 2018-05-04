@@ -134,9 +134,6 @@ class RedirectRequestSubscriberTest extends UnitTestCase {
     $checker->expects($this->any())
       ->method('canRedirect')
       ->will($this->returnValue(TRUE));
-    $checker->expects($this->any())
-      ->method('isLoop')
-      ->will($this->returnValue(FALSE));
 
     $context = $this->getMock('Symfony\Component\Routing\RequestContext');
 
